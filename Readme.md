@@ -1,4 +1,4 @@
-# EFCore Notlarý
+# EFCore Best Practices
 ## DbContext 
 ---
 **Add/AddAsync**
@@ -7,41 +7,40 @@
 **Find/FindAsync**
 **SaveChanges/SaveChangesAsync**
 ---
-> Context üzerinde **'Add-Update-Remove'** iþlemleri yapýlýnca database üzerine hemen yansýtýlmaz.
-> Memory de Added, Modified, Deleted olarak state ini deðiþtirir.
-> SaveChanges veya SaveChangesAsync metodu ile database e yansýtýlýr.
+> When **'Add-Update-Remove'** operations are performed on the context, it is not immediately reflected on the database.
+> In Memory, its state changes as Added, Modified, Deleted
+> It is reflected to the database with the SaveChanges or SaveChangesAsync method.
 ---
-> Note: SaveChanges yapýlana kadar yapýlan bütün deðiþiklikler memory de tutulur.
-> SaveChanges yapýlýnca memorydeki deðiþikliklerden birinde hata olursa bütün deðiþiklikler geri alýnýr.
+> Note: All changes are kept in memory until SaveChanges is made.
+> If there is an error in one of the changes in the memory when SaveChanges is made, all changes are undone.
 ---
 ## Entry States
-**Unchanged** - Veriyi ilk çektiðimizde `var products = await _context.Products.ToListAsync();` olan durumudur.
+**Unchanged** - It is the state when we first pull the data. `var products = await _context.Products.ToListAsync();`
 
-**Added** - Veriyi eklediðimizde olan durumdur. 
-- `var product = new Product { Name = "Product 1" }	;` Burada 'detached' durumundadýr.
-- `await _context.Products.AddAsync(product);` Burada 'added' durumuna geçer.
-- `await _context.SaveChangesAsync();` Burada 'unchanged' durumuna geçer.
+**Added** - It is the state when we added data.
+- `var product = new Product { Name = "Product 1" }	;` Here it is in the 'detached' state.
+- `await _context.Products.AddAsync(product);` Here it is in the 'added' state.
+- `await _context.SaveChangesAsync();` Here it is in the 'unchanged' state.
 
-**Detached** - Veriyi oluþturduðumuzda fakat context e eklemediðimizde olan durumudur.
-- `var product = new Product { Name = "Product 1" }	;` Burada 'detached' durumundadýr.
-- `await _context.SaveChangesAsync();` Burada 'unchanged' durumuna geçer.
+**Detached** - It is when we create the data but have not added it to the context yet.
+- `var product = new Product { Name = "Product 1" }	;`  Here it is in the 'detached' state.  
+- `await _context.SaveChangesAsync();` Here it is in the 'unchanged' state. 
 
-**Deleted** - Veriyi sildiðimizde olan durumudur.
-- `var product = await _context.Products.FindAsync(1);` Burada 'unchanged' durumundadýr.
-- `await _context.Products.RemoveAsync(product);` Burada 'deleted' durumuna geçer.
-- `await _context.SaveChangesAsync();` Burada 'unchanged' durumuna geçer.
+**Deleted** - It is the state when we deleted data.
+- `var product = await _context.Products.FindAsync(1);` Here it is in the 'unchanged' state. 
+- `await _context.Products.RemoveAsync(product);` Here it is in the 'deleted' state. 
+- `await _context.SaveChangesAsync();` Here it is in the 'unchanged' state. 
 
-**Modified** - Veriyi güncellediðimizde olan durumudur.
-- `var product = await _context.Products.FindAsync(1);` Burada 'unchanged' durumundadýr.
-- `product.Name = "Kalem";` Burada 'modified' durumuna geçer.
-- `await _context.SaveChangesAsync();` Burada 'unchanged' durumuna geçer.
+**Modified** -  It is the state when we updated data.
+- `var product = await _context.Products.FindAsync(1);` Here it is in the 'unchanged' state. 
+- `product.Name = "Kalem";` Here it is in the 'modified' state. 
+- `await _context.SaveChangesAsync();` Here it is in the 'unchanged' state. 
 ---
 ## ChangeTracker
-**ChangeTracker** - Context üzerindeki takip edilen entitleri tutar.
-- `var changeTracker = _context.ChangeTracker.Entries();` Burada context üzerindeki deðiþiklikleri takip eder.
-- `var changeTracker = _context.ChangeTracker.Entries<Product>();` Burada context üzerindeki Product tipindeki deðiþiklikleri takip eder.
-- `var changeTracker = _context.ChangeTracker.Entries<Product>().ToList();` Burada context üzerindeki Product tipindeki deðiþiklikleri listeler.
-- `var changeTracker = _context.ChangeTracker.Entries<Product>().Where(x => x.State == EntityState.Modified).ToList();` Burada context üzerindeki Product tipindeki deðiþiklikleri listeler ve durumu modified olanlarý getirir.
+**ChangeTracker** - It keeps tracked entities on the context.
+- `var changeTracker = _context.ChangeTracker.Entries();` Here it follows the changes on the context.
+- `var changeTracker = _context.ChangeTracker.Entries<Product>();` Here it follows the changes in the Product Entity on the context.
+- `var changeTracker = _context.ChangeTracker.Entries<Product>().Where(x => x.State == EntityState.Modified).ToList();` Here it lists the changes of the Product Entity on the context and returns the modified status.
 ---
 ## DbSet
 **Add/AddAsync**
@@ -89,8 +88,8 @@ public class Category
 
 ---
 #### One-to-One
-> Aþaðýda kurduðumuz iliþkide `Product` parent `ProductFeatureId` child olarak tanýmlanmýþtýr.
-> `One-to-One` iliþkide `foreign key`  koyulan entity `child` olan entity olmalýdýr.
+> In the relationship we have established below, `Product` is defined as parent and `ProductFeatureId` is defined as child.
+> In a One-to-One relationship, the entity marked with the `foreign key` must be the child entity.
 
 | ProductId | Name |
 | ------ | ------ |
@@ -217,3 +216,16 @@ using (var _context = new AppDbContext())
     _context.SaveChanges();
 }
 ```
+- [ ] - HTML enhanced for web apps!
+- [Ace Editor] - awesome web-based text editor
+- [jQuery] - duh
+
+| Plugin | README |
+| ------ | ------ |
+| Dropbox | [plugins/dropbox/README.md][PlGa] |
+
+
+
+[//]: # (These are reference links used in the body of this note and get stripped out when the markdown processor does its job. There is no need to format nicely because it shouldn't be seen. Thanks SO - http://stackoverflow.com/questions/4823468/store-comments-in-markdown-syntax)
+
+   [PlGa]: <https://github.com/RahulHP/dillinger/blob/master/plugins/googleanalytics/README.md>
