@@ -217,16 +217,3 @@ using (var _context = new AppDbContext())
     _context.SaveChanges();
 }
 ```
-- [ ] - HTML enhanced for web apps!
-- [Ace Editor] - awesome web-based text editor
-- [jQuery] - duh
-
-| Plugin | README |
-| ------ | ------ |
-| Dropbox | [plugins/dropbox/README.md][PlGa] |
-
-
-
-[//]: # (These are reference links used in the body of this note and get stripped out when the markdown processor does its job. There is no need to format nicely because it shouldn't be seen. Thanks SO - http://stackoverflow.com/questions/4823468/store-comments-in-markdown-syntax)
-
-   [PlGa]: <https://github.com/RahulHP/dillinger/blob/master/plugins/googleanalytics/README.md>
