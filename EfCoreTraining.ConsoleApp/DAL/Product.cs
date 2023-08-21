@@ -11,9 +11,12 @@ namespace EfCoreTraining.ConsoleApp.DAL
         public int Id { get; set; }
         public string Name { get; set; }
         public decimal Price { get; set; }
+        public decimal DiscountPrice { get; set; }
+        public DateTime CreatedDate { get; set; }
         public DateTime? UpdatedDateDate { get; set; }
+        public bool IsDeleted { get; set; }
         public int CategoryId { get; set; }
-        public Category Category { get; set; }
-        public ProductFeature ProductFeatures { get; set; }
+        public virtual Category Category { get; set; }
+        public virtual ProductFeature? ProductFeatures { get; set; }
     }
 }

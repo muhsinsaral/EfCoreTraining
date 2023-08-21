@@ -6,11 +6,12 @@ using System.Threading.Tasks;
 
 namespace EfCoreTraining.ConsoleApp.DAL
 {
-    public class Student
+    public class BasePerson
     {
         public int Id { get; set; }
-        public string Name { get; set; }
+        public string FirstName { get; set; }
+        public string LastName { get; set; }
         public int Age { get; set; }
-        public virtual List<Teacher> Teachers { get; set; } = new();
+
     }
 }

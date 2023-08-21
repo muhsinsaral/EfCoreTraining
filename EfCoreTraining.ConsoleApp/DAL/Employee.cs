@@ -6,10 +6,8 @@ using System.Threading.Tasks;
 
 namespace EfCoreTraining.ConsoleApp.DAL
 {
-    public class Teacher
+    public class Employee : BasePerson
     {
-        public int Id { get; set; }
-        public string Name { get; set; }
-        public virtual List<Student> Students { get; set; } = new();
+        public decimal Salary { get; set; }
     }
 }
